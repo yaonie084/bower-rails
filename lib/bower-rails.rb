@@ -30,6 +30,10 @@ module BowerRails
     # instead of rake bower:install before assets precompilation
     attr_accessor :force_install
 
+    # If set to true then rake bower:install[--allow-root] will be invoked
+    # instrad of rake bower:install before assets precompilation
+    attr_accessor :allow_root
+
     def configure &block
       yield self if block_given?
       collect_tasks
@@ -41,6 +45,7 @@ module BowerRails
         install_cmd = 'bower:install'
         install_cmd = 'bower:install:deployment' if @use_bower_install_deployment
         install_cmd += '[-F]' if @force_install
+        install_cmd += '[--allow-root]' if @allow_root
 
         @tasks << [install_cmd] if @install_before_precompile
         @tasks << [install_cmd, 'bower:clean']   if @clean_before_precompile
